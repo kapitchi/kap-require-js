@@ -1,0 +1,20 @@
+{
+    "name": "kapitchi/kap-require-js",
+    "description": "ZF2 RequireJS view helper module",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "zf2",
+        "requirejs"
+    ],
+    "require": {
+        "zendframework/zendframework": "~2.0"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-0": {
+            "KapRequireJs": "src/"
+        }
+    }
+}
