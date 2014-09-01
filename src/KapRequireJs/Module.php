@@ -30,7 +30,7 @@ class Module implements ViewHelperProviderInterface
     public function getViewHelperConfig()
     {
         return [
-            'invokables' => [
+            'factories' => [
                 'requireJs' => 'KapRequireJs\View\Helper\RequireJs'
             ]
         ];

@@ -5,7 +5,8 @@
 <script src="<?=$this->basePath(). '/' . $this->configUrl?>"></script>
 <script>
     requirejs.config({
-        baseUrl: '<?=$this->basePath()?>/'
+        baseUrl: '<?=$this->basePath()?>/',
+        config: <?= json_encode((object)$this->config) ?>
     });
 </script>
 <script>require(<?= json_encode($this->loadModules) ?>);</script>

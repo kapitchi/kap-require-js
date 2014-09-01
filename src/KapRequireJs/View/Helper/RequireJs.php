@@ -9,6 +9,7 @@ use Zend\View\Helper\AbstractHelper;
 class RequireJs extends AbstractHelper implements FactoryInterface
 {
     protected $loadModules = array();
+    protected $config = [];
     protected $buildConfigUrl;
     protected $requireJsUrl = 'vendor/requirejs/require.js';
     protected $configUrl = 'config.js';
@@ -28,7 +29,7 @@ class RequireJs extends AbstractHelper implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->getServiceLocator()->get('ApplicationConfig');
+        $config = $serviceLocator->getServiceLocator()->get('Config');
         if (empty($config['requirejs'])) {
             return new self;
         }
@@ -36,13 +37,31 @@ class RequireJs extends AbstractHelper implements FactoryInterface
         $options = $config['requirejs'];
 
         $helper = new self;
-        //$helper->setBuildConfigUrl($options['build_config_url']);
+        $helper->setOptions($options);
+        
         return $helper;
     }
 
     public function __toString()
     {
         return $this->render();
+    }
+    
+    public function setOptions(array $options)
+    {
+        if(!empty($options['config_url'])) {
+            $this->setConfigUrl($options['config_url']);
+        }
+        
+        if(!empty($options['build_config_url'])) {
+            $this->setBuildConfigUrl($options['build_config_url']);
+        }
+
+        if(!empty($options['config'])) {
+            foreach($options['config'] as $module => $data) {
+                $this->config($module, $data);
+            }
+        }
     }
 
     /**
@@ -56,6 +75,15 @@ class RequireJs extends AbstractHelper implements FactoryInterface
         $this->setLoadModules(array_merge($this->loadModules, $module));
         return $this;
     }
+    
+    public function config($module, $data)
+    {
+        if(!isset($this->config[$module])) {
+            $this->config[$module] = [];
+        }
+
+        $this->config[$module] = array_merge_recursive($this->config[$module], $data);
+    }
 
     public function render()
     {
@@ -64,6 +92,7 @@ class RequireJs extends AbstractHelper implements FactoryInterface
             array(
                 'requireJsUrl' => $this->getRequireJsUrl(),
                 'configUrl' => $this->getConfigUrl(),
+                'config' => $this->config,
                 'loadModules' => $this->getLoadModules(),
                 'buildConfigUrl' => $this->getBuildConfigUrl(),
             )
