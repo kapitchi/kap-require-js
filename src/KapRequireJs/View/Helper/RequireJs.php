@@ -11,6 +11,7 @@ class RequireJs extends AbstractHelper implements FactoryInterface
     protected $loadModules = array();
     protected $config = [];
     protected $buildConfigUrl;
+    protected $paths = [];
     protected $requireJsUrl = 'vendor/requirejs/require.js';
     protected $configUrl = 'config.js';
 
@@ -62,6 +63,10 @@ class RequireJs extends AbstractHelper implements FactoryInterface
                 $this->config($module, $data);
             }
         }
+
+        if(!empty($options['paths'])) {
+            $this->setPaths($options['paths']);
+        }
     }
 
     /**
@@ -95,6 +100,7 @@ class RequireJs extends AbstractHelper implements FactoryInterface
                 'config' => $this->config,
                 'loadModules' => $this->getLoadModules(),
                 'buildConfigUrl' => $this->getBuildConfigUrl(),
+                'paths' => $this->getPaths(),
             )
         );
     }
@@ -152,4 +158,19 @@ class RequireJs extends AbstractHelper implements FactoryInterface
         return $this->configUrl;
     }
 
+    /**
+     * @param array $paths
+     */
+    public function setPaths(array $paths)
+    {
+        $this->paths = $paths;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPaths()
+    {
+        return $this->paths;
+    }
 }
